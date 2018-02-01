@@ -1,0 +1,9 @@
+# -------------------------------------
+#defaultView:Map
+SELECT ?item ?itemLabel ?geoLocation ?image
+WHERE {
+    ?item wdt:P463 wd:Q1010307 ;  # member of Les Plus Beaux Villages de France (organisation)
+          wdt:P625 ?geoLocation .
+    OPTIONAL { ?item wdt:P18 ?image }
+    SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],fr" }
+}

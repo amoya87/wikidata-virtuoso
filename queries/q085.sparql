@@ -1,0 +1,8 @@
+# -------------------------------------
+SELECT DISTINCT ?person ?personLabel WHERE {
+  ?person wdt:P166/wdt:P31? wd:Q7191 .
+  ?person wdt:P166/wdt:P31? wd:Q19020 .
+  SERVICE wikibase:label {
+    bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en" .
+  }
+}

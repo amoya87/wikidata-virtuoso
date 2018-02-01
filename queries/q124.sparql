@@ -1,0 +1,35 @@
+# -------------------------------------
+#defaultView:ScatterChart
+# currently depends on wdt:P625 yielding a single value for a ?mun .., strange results may be fixable
+# by applying (https://www.wikidata.org/wiki/Help:Ranking) to ?mun items where multiple P625 values exist
+SELECT ?from ?kilometers ?to ?rank_group
+WHERE {
+  {
+    SELECT (SAMPLE(?mun) AS ?mun) (SAMPLE(?mun2) AS ?mun2) (SAMPLE(?distNum) AS ?kilometers)
+           (COUNT(*)-1 AS ?rg) (IF(FLOOR((?rg-(100*FLOOR(?rg/100)))/10)=1,0,?rg-(10*FLOOR(?rg/10))) AS ?rgmod)
+           (IF(?rgmod=1,"st",IF(?rgmod=2,"nd",IF(?rgmod=3,"rd","th"))) AS ?rgord)
+           (CONCAT(SUBSTR("00",1+STRLEN(STR(?rg))),STR(?rg),?rgord,"-most farthest places") AS ?rank_group)
+    WHERE {
+      BIND(wd:Q15284 AS ?muntype).
+      BIND(wd:Q6308 AS ?area).
+      ?mun wdt:P31/wdt:P279* ?muntype;
+           wdt:P131 ?area;
+           wdt:P625 ?loc.
+      OPTIONAL { ?mun2 wdt:P31/wdt:P279* ?muntype;
+                       wdt:P131 ?area;
+                       wdt:P625 ?loc2. }
+      OPTIONAL { ?mun3 wdt:P31/wdt:P279* ?muntype;
+                       wdt:P131 ?area;
+                       wdt:P625 ?loc3. }
+      BIND(geof:distance(?loc, ?loc2) AS ?distNum).
+      BIND(geof:distance(?loc, ?loc3) AS ?d).
+      FILTER(?distNum >= ?d).
+    } GROUP BY ?mun ?mun2 ?distNum
+  }
+  
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en".
+    ?mun rdfs:label ?from.
+    ?mun2 rdfs:label ?to.
+  }
+}
+ORDER BY ?rank_group ?kilometers ?from

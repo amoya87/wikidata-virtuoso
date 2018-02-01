@@ -1,0 +1,3 @@
+checkpoint;
+commit WORK;
+checkpoint;

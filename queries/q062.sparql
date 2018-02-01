@@ -1,0 +1,10 @@
+# -------------------------------------
+#defaultView:Map
+SELECT ?label ?coord ?subj
+WHERE {
+   ?subj wdt:P31 wd:Q839954 ; # instance of archaeological site
+         wdt:P31 wd:Q23413 ;  # instance of castle
+         wdt:P625 ?coord .
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". 
+                         ?subj rdfs:label ?label}
+}

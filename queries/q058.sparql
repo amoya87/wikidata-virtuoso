@@ -1,0 +1,10 @@
+# -------------------------------------
+#defaultView:Map
+SELECT DISTINCT ?objectLabel ?coord ?layer
+WHERE
+{
+  ?object wdt:P31/wdt:P279* wd:Q159719;
+     wdt:P625 ?coord.
+  ?object wdt:P31 ?type. ?type wdt:P279* wd:Q159719.
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". ?type rdfs:label ?layer }
+}

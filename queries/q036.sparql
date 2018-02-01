@@ -1,0 +1,13 @@
+# -------------------------------------
+#defaultView:LineChart
+SELECT ?year (COUNT(?_genre) AS ?count ) (SAMPLE(?_genreLabel) AS ?genreLabel )  WHERE {
+  ?item wdt:P31 wd:Q571;
+        wdt:P577 ?_publication_date;
+        wdt:P136 ?_genre.
+  BIND(str(YEAR(?_publication_date)) AS ?year)
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". 
+                         ?_genre rdfs:label ?genreLabel.}
+ FILTER (?_publication_date >= "2000-00-00T00:00:00Z"^^xsd:dateTime)
+}
+GROUP BY ?_genreLabel ?year
+HAVING (?count > 10)

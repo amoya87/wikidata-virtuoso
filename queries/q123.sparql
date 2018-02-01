@@ -1,0 +1,27 @@
+# -------------------------------------
+#defaultView:ScatterChart
+SELECT ?from (?distNum AS ?kilometers) ?to (?distGrp AS ?animation) WHERE {
+  BIND(wd:Q15284 AS ?muntype).
+  BIND(wd:Q6308 AS ?area).
+  ?mun wdt:P31/wdt:P279* ?muntype;
+       wdt:P131 ?area;
+       wdt:P625 ?loc.
+  OPTIONAL { ?mun2 wdt:P31/wdt:P279* ?muntype;
+                   wdt:P131 ?area;
+                   wdt:P625 ?loc2. }
+  #FILTER (STR(?mun) <= STR(?mun2)).
+  BIND(geof:distance(?loc, ?loc2) AS ?distNum).
+  BIND(COALESCE(
+    IF(?distNum >= 40, "40 km und mehr", 1/0),
+    IF(?distNum >= 30, "30 - 40 km", 1/0),
+    IF(?distNum >= 20, "20 - 30 km", 1/0),
+    IF(?distNum >= 10, "10 - 20 km", 1/0),
+    IF(?distNum >= 5, "05 - 10 km", 1/0),
+    IF(?distNum >= 1, "01 - 05 km", "00 - 01 km")) AS ?distGrp).
+  
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en".
+    ?mun rdfs:label ?from.
+    ?mun2 rdfs:label ?to.
+  }
+}
+ORDER BY ?animation ?from ?kilometers

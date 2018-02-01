@@ -1,0 +1,20 @@
+# -------------------------------------
+#added before 2016-10
+#Illustrates optional fields, instances of subclasses, language fallback on label service, date to year conversion
+# Chevaux sur Wikidata
+SELECT DISTINCT ?cheval ?chevalLabel ?mere ?pere (year(?naissance) as ?Naissance) (year(?deces) as ?Décès) ?sexeLabel
+WHERE
+{
+	?cheval wdt:P31/wdt:P279* wd:Q726 .     # Instance et sous-classes de Q726-Cheval
+	 
+	OPTIONAL{?cheval wdt:P25 ?mere .}       # P25  : Mère
+	OPTIONAL{?cheval wdt:P22 ?pere .}       # P22  : Père
+	OPTIONAL{?cheval wdt:P569 ?naissance .} # P569 : Date de naissance
+	OPTIONAL{?cheval wdt:P570 ?deces .}     # P570 : Date de décès
+	OPTIONAL{?cheval wdt:P21 ?sexe .}       # P21  : Sexe
+ 
+	SERVICE wikibase:label { #BabelRainbow
+		bd:serviceParam wikibase:language "[AUTO_LANGUAGE],fr,ar,be,bg,bn,ca,cs,da,de,el,en,es,et,fa,fi,he,hi,hu,hy,id,it,ja,jv,ko,nb,nl,eo,pa,pl,pt,ro,ru,sh,sk,sr,sv,sw,te,th,tr,uk,yue,vec,vi,zh"
+	}
+}
+ORDER BY ?cheval

@@ -1,0 +1,11 @@
+# -------------------------------------
+#added before 2016-10
+
+#defaultView:Map
+SELECT DISTINCT ?city ?cityLabel ?populatie2 ?coor WHERE {
+  wd:Q12892 wdt:P1082 ?populatie .
+  ?city wdt:P1082 ?populatie2 ;
+        wdt:P625 ?coor .
+  FILTER (abs(?populatie - ?populatie2) < 1000)
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "nl" }
+}

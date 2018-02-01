@@ -1,0 +1,11 @@
+# -------------------------------------
+#added before 2016-10
+
+#Mountains over 8000 elevation
+SELECT ?subj ?label ?coord ?elev
+WHERE
+{
+	?subj wdt:P2044 ?elev	filter(?elev > 8000) .
+	?subj wdt:P625 ?coord .
+	SERVICE wikibase:label { bd:serviceParam wikibase:language "en,zh" . ?subj rdfs:label ?label }
+}

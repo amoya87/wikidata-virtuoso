@@ -1,0 +1,10 @@
+# -------------------------------------
+#added before 2016-10
+#Demonstrates "no value" handling
+SELECT ?human ?humanLabel
+WHERE
+{
+	?human wdt:P31 wd:Q5 .       #find humans
+	?human rdf:type wdno:P40 .   #with at least one P40 (child) statement defined to be "no value"
+	SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en" }
+}

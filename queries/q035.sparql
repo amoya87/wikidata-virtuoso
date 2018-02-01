@@ -1,0 +1,9 @@
+# -------------------------------------
+#defaultView:Map
+SELECT ?itemLabel ?itemDescription ?image ?coord WHERE {
+  ?item (wdt:P31/wdt:P279*) wd:Q23397.
+  ?item wdt:P17 wd:Q1009.
+  ?item wdt:P625 ?coord.
+  OPTIONAL {?item wdt:P18 ?image.}
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }
+}

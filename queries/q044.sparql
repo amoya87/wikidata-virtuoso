@@ -1,0 +1,11 @@
+# -------------------------------------
+#defaultView:Tree
+SELECT ?composer ?composerLabel ?composerImage ?tonality ?tonalityLabel ?composition ?compositionLabel WHERE {
+  ?composer wdt:P31 wd:Q5;
+            wdt:P19|wdt:P20|wdt:P551 wd:Q1741.
+  OPTIONAL { ?composer wdt:P18 ?composerImage. }
+  ?composition wdt:P86 ?composer;
+               wdt:P826 ?tonality.
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],de-at,de". }
+}
+ORDER BY ?composerLabel ?tonalityLabel
