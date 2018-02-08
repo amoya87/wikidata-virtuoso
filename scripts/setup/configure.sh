@@ -1,7 +1,7 @@
 #!/bin/bash
 #virtuoso.ini
 # stop service by pid
-kill `pidof virtuoso-t`
+kill -9 `pidof virtuoso-t`
 
 system_memory_in_mb=`free -m | awk '/:/ {print $2;exit}'`
 echo La memoria libre es: $system_memory_in_mb
@@ -29,7 +29,7 @@ sed -i "s/^MaxCheckpointRemap.*/MaxCheckpointRemap              = ${maxCheckpoin
 
 # ask for path of input data
 read -p "Enter the path to dir of input data [/path/to/data]: " DIR;
-echo El DIR es : $DIR
+echo DirsAllowed += $DIR
 
 
 # DirsAllowed  = ..., /path/to/data
@@ -38,4 +38,4 @@ if [[ -d $DIR ]] ; then
 fi;
 
 # start virtuoso service
-virtuoso-t &
+virtuoso-t +configfile /usr/local/var/lib/virtuoso/db/virtuoso.ini &
