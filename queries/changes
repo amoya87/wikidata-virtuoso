@@ -33,20 +33,16 @@ PREFIX hint: <http://www.bigdata.com/queryHints#>' *
 
 delete federate
 delete labels
-remove Bind
 delete double select when is only for label reason
 
 002:distinct:err
 009:date now dependent
 010:group by label:ok: join witw label, because of group by label
-012:bind:ok
-013:bind:ok
 014:group by label:ok:join witw label, because of group by label. labels only in english
 015:remove double select
 017:remove double select
 018:remove group by
 007:019:limit without sense
-021:bind,union:err
 
 
 

@@ -29,7 +29,6 @@ PREFIX prov: <http://www.w3.org/ns/prov#>
 PREFIX bds: <http://www.bigdata.com/rdf/search#>
 PREFIX gas: <http://www.bigdata.com/rdf/gas#>
 PREFIX hint: <http://www.bigdata.com/queryHints#>
-# -------------------------------------
 #defaultView:ScatterChart
 PREFIX var_muntype: <http://www.wikidata.org/entity/Q15284>
 PREFIX var_area: <http://www.wikidata.org/entity/Q6308>

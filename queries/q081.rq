@@ -29,7 +29,6 @@ PREFIX prov: <http://www.w3.org/ns/prov#>
 PREFIX bds: <http://www.bigdata.com/rdf/search#>
 PREFIX gas: <http://www.bigdata.com/rdf/gas#>
 PREFIX hint: <http://www.bigdata.com/queryHints#>
-# -------------------------------------
 #Show titles of articles about Ukrainian villages on Romanian Wikipedia, plus English and Ukrainian labels in Wikidata items
 #added in 2017-05
 SELECT DISTINCT ?item ?LabelEN ?LabelUK ?page_titleRO WHERE {

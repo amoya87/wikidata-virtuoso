@@ -29,7 +29,6 @@ PREFIX prov: <http://www.w3.org/ns/prov#>
 PREFIX bds: <http://www.bigdata.com/rdf/search#>
 PREFIX gas: <http://www.bigdata.com/rdf/gas#>
 PREFIX hint: <http://www.bigdata.com/queryHints#>
-# -------------------------------------
 SELECT ?s ?desc ?linkcount
 WHERE
 {
@@ -43,5 +42,6 @@ WHERE
   }
 ?s rdfs:label ?desc FILTER(lang(?desc)="en").
 }
+GROUP BY ?s ?desc ?linkcount
 ORDER BY DESC(?linkcount)
 LIMIT 50

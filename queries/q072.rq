@@ -29,7 +29,6 @@ PREFIX prov: <http://www.w3.org/ns/prov#>
 PREFIX bds: <http://www.bigdata.com/rdf/search#>
 PREFIX gas: <http://www.bigdata.com/rdf/gas#>
 PREFIX hint: <http://www.bigdata.com/queryHints#>
-# -------------------------------------
 #added before 2016-10
  #Definition for Occitania (Q104285) is the one defined by P527 on item Q104285
 SELECT ?item ?yob ?yod

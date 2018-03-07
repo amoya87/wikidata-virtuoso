@@ -29,7 +29,6 @@ PREFIX prov: <http://www.w3.org/ns/prov#>
 PREFIX bds: <http://www.bigdata.com/rdf/search#>
 PREFIX gas: <http://www.bigdata.com/rdf/gas#>
 PREFIX hint: <http://www.bigdata.com/queryHints#>
-# -------------------------------------
 #defaultView:BubbleChart
 #TEMPLATE={ "template": "The top 10 heaviest ?type ", "variables": { "?type": { "query": "SELECT DISTINCT ?id WHERE { ?i wdt:P2067 ?v. ?i wdt:P31 ?id}" } } }
 SELECT ?item ?itemLabel ?mass ?image WHERE {

@@ -29,7 +29,6 @@ PREFIX prov: <http://www.w3.org/ns/prov#>
 PREFIX bds: <http://www.bigdata.com/rdf/search#>
 PREFIX gas: <http://www.bigdata.com/rdf/gas#>
 PREFIX hint: <http://www.bigdata.com/queryHints#>
-# -------------------------------------
 #defaultView:BarChart
 # male/female population _must_ not be added unqualified as total population (!)
 # this is an error and should be fixed at the item using P1540 and P1539 instead

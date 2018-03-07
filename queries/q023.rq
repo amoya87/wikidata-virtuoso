@@ -29,7 +29,6 @@ PREFIX prov: <http://www.w3.org/ns/prov#>
 PREFIX bds: <http://www.bigdata.com/rdf/search#>
 PREFIX gas: <http://www.bigdata.com/rdf/gas#>
 PREFIX hint: <http://www.bigdata.com/queryHints#>
-# -------------------------------------
 #defaultView:BubbleChart
 #TEMPLATE={"template":"Overall causes of death ranking of ?thing ","variables":{"?thing": {"query":"SELECT ?id  (COUNT(?id) AS ?count) WHERE {  ?sub wdt:P509 ?y.  ?sub wdt:P31 ?id. } GROUP BY ?id "} } }
 SELECT ?cid ?cause (COUNT(*) AS ?count) WHERE {

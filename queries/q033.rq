@@ -29,7 +29,6 @@ PREFIX prov: <http://www.w3.org/ns/prov#>
 PREFIX bds: <http://www.bigdata.com/rdf/search#>
 PREFIX gas: <http://www.bigdata.com/rdf/gas#>
 PREFIX hint: <http://www.bigdata.com/queryHints#>
-# -------------------------------------
 #defaultView:LineChart
 SELECT  (str(?year) AS ?year) (AVG( ?_number_of_children ) AS ?count) WHERE {
   ?item wdt:P31 wd:Q5.

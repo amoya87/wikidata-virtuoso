@@ -29,7 +29,6 @@ PREFIX prov: <http://www.w3.org/ns/prov#>
 PREFIX bds: <http://www.bigdata.com/rdf/search#>
 PREFIX gas: <http://www.bigdata.com/rdf/gas#>
 PREFIX hint: <http://www.bigdata.com/queryHints#>
-# -------------------------------------
 SELECT ?show ?showLabel ?seasonNumber ?episode ?episodeLabel
 WHERE {
 	BIND(wd:Q886 as ?show) .

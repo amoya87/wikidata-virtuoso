@@ -29,7 +29,6 @@ PREFIX prov: <http://www.w3.org/ns/prov#>
 PREFIX bds: <http://www.bigdata.com/rdf/search#>
 PREFIX gas: <http://www.bigdata.com/rdf/gas#>
 PREFIX hint: <http://www.bigdata.com/queryHints#>
-# -------------------------------------
 SELECT ?director ?director_label ?films ?sitelinks ((?films * ?sitelinks) as ?rank)
 WHERE {
   {SELECT ?director (count(distinct ?film) as ?films) (count(distinct ?sitelink) as ?sitelinks)

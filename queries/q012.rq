@@ -29,12 +29,12 @@ PREFIX prov: <http://www.w3.org/ns/prov#>
 PREFIX bds: <http://www.bigdata.com/rdf/search#>
 PREFIX gas: <http://www.bigdata.com/rdf/gas#>
 PREFIX hint: <http://www.bigdata.com/queryHints#>
-# -------------------------------------
 PREFIX schema: <http://schema.org/>
 
 SELECT ?sitelink
 WHERE 
 {
-  ?sitelink schema:about wd:Q52 .
+  BIND(wd:Q52 AS ?wikipedia)
+  ?sitelink schema:about ?wikipedia .
   FILTER REGEX(STR(?sitelink), ".wikipedia.org/wiki/") .
 }
