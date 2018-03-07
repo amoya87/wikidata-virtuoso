@@ -8,25 +8,34 @@ PREFIX ps: <http://www.wikidata.org/prop/statement/>
 PREFIX pq: <http://www.wikidata.org/prop/qualifier/>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX bd: <http://www.bigdata.com/rdf#>
+
+PREFIX wdref: <http://www.wikidata.org/reference/>
+PREFIX psv: <http://www.wikidata.org/prop/statement/value/>
+PREFIX psn: <http://www.wikidata.org/prop/statement/value-normalized/>
+PREFIX pqv: <http://www.wikidata.org/prop/qualifier/value/>
+PREFIX pqn: <http://www.wikidata.org/prop/qualifier/value-normalized/>
+PREFIX pr: <http://www.wikidata.org/prop/reference/>
+PREFIX prv: <http://www.wikidata.org/prop/reference/value/>
+PREFIX prn: <http://www.wikidata.org/prop/reference/value-normalized/>
+PREFIX wdno: <http://www.wikidata.org/prop/novalue/>
+PREFIX wdata: <http://www.wikidata.org/wiki/Special:EntityData/>
+
+PREFIX schema: <http://schema.org/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX prov: <http://www.w3.org/ns/prov#>
+PREFIX bds: <http://www.bigdata.com/rdf/search#>
+PREFIX gas: <http://www.bigdata.com/rdf/gas#>
+PREFIX hint: <http://www.bigdata.com/queryHints#>
 # -------------------------------------
-SELECT ?event ?eventLabel ?date
+#added before 2016-10
+#Demonstrates "no value" handling
+SELECT ?human ?humanLabel
 WHERE
 {
-	# find events
-	?event wdt:P31/wdt:P279* wd:Q1190554.
-	# with a point in time or start date
-	OPTIONAL { ?event wdt:P585 ?date. }
-	OPTIONAL { ?event wdt:P580 ?date. }
-	# but at least one of those
-	FILTER(BOUND(?date) && DATATYPE(?date) = xsd:dateTime).
-	# not in the future, and not more than 31 days ago
-	BIND(NOW() - ?date AS ?distance).
-	FILTER(0 <= ?distance && ?distance < 31).
-	# and get a label as well
-	OPTIONAL {
-		?event rdfs:label ?eventLabel.
-		FILTER(LANG(?eventLabel) = "en").
-	}
+	?human wdt:P31 wd:Q5 .       #find humans
+	?human rdf:type wdno:P40 .   #with at least one P40 (child) statement defined to be "no value"
+	SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en" }
 }
-# limit to 10 results so we don't timeout
-LIMIT 10

@@ -8,16 +8,36 @@ PREFIX ps: <http://www.wikidata.org/prop/statement/>
 PREFIX pq: <http://www.wikidata.org/prop/qualifier/>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX bd: <http://www.bigdata.com/rdf#>
+
+PREFIX wdref: <http://www.wikidata.org/reference/>
+PREFIX psv: <http://www.wikidata.org/prop/statement/value/>
+PREFIX psn: <http://www.wikidata.org/prop/statement/value-normalized/>
+PREFIX pqv: <http://www.wikidata.org/prop/qualifier/value/>
+PREFIX pqn: <http://www.wikidata.org/prop/qualifier/value-normalized/>
+PREFIX pr: <http://www.wikidata.org/prop/reference/>
+PREFIX prv: <http://www.wikidata.org/prop/reference/value/>
+PREFIX prn: <http://www.wikidata.org/prop/reference/value-normalized/>
+PREFIX wdno: <http://www.wikidata.org/prop/novalue/>
+PREFIX wdata: <http://www.wikidata.org/wiki/Special:EntityData/>
+
+PREFIX schema: <http://schema.org/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX prov: <http://www.w3.org/ns/prov#>
+PREFIX bds: <http://www.bigdata.com/rdf/search#>
+PREFIX gas: <http://www.bigdata.com/rdf/gas#>
+PREFIX hint: <http://www.bigdata.com/queryHints#>
 # -------------------------------------
-#defaultView:AreaChart
-SELECT ?cid (STR(SAMPLE(?year)) AS ?year) (COUNT(*) AS ?count) ?cause WHERE {
-  ?pid wdt:P31 wd:Q5;  # instance of human
-       wdt:P509 ?cid;  # cause of death
-       wdt:P570 ?_date_of_death.
-  ?cid wdt:P279* wd:Q12078.  # type of cancer
- SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en".
-                         ?cid rdfs:label ?cause. }
-  BIND ( YEAR(?_date_of_death) AS ?year )
-  FILTER( ?year > 1960 )
+#defaultView:BarChart
+SELECT (SAMPLE(?year) AS ?year) (COUNT(?_country) AS ?count) (SAMPLE(?_countryLabel) AS ?_countryLabel) WHERE {
+  ?object wdt:P31/wdt:P279* wd:Q134447. # Power stations or subtypes
+  BIND(STR(YEAR(?_inception)) AS ?year)
+  ?object wdt:P571 ?_inception;
+          wdt:P17 ?_country.
+SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en".
+                        ?_country rdfs:label ?_countryLabel. }
 }
-GROUP BY ?cid ?cause ?year
+GROUP BY ?year ?_country
+ORDER BY ?_countryLabel

@@ -8,15 +8,43 @@ PREFIX ps: <http://www.wikidata.org/prop/statement/>
 PREFIX pq: <http://www.wikidata.org/prop/qualifier/>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX bd: <http://www.bigdata.com/rdf#>
+
+PREFIX wdref: <http://www.wikidata.org/reference/>
+PREFIX psv: <http://www.wikidata.org/prop/statement/value/>
+PREFIX psn: <http://www.wikidata.org/prop/statement/value-normalized/>
+PREFIX pqv: <http://www.wikidata.org/prop/qualifier/value/>
+PREFIX pqn: <http://www.wikidata.org/prop/qualifier/value-normalized/>
+PREFIX pr: <http://www.wikidata.org/prop/reference/>
+PREFIX prv: <http://www.wikidata.org/prop/reference/value/>
+PREFIX prn: <http://www.wikidata.org/prop/reference/value-normalized/>
+PREFIX wdno: <http://www.wikidata.org/prop/novalue/>
+PREFIX wdata: <http://www.wikidata.org/wiki/Special:EntityData/>
+
+PREFIX schema: <http://schema.org/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX prov: <http://www.w3.org/ns/prov#>
+PREFIX bds: <http://www.bigdata.com/rdf/search#>
+PREFIX gas: <http://www.bigdata.com/rdf/gas#>
+PREFIX hint: <http://www.bigdata.com/queryHints#>
 # -------------------------------------
-SELECT ?item ?itemLabel ?twitter ?LinkedIN ?politieke_partij ?politieke_partijLabel ?positie_op_lijst
-WHERE {
-	?item p:P3602 ?node .
-    OPTIONAL { ?item wdt:P2002 ?twitter }
-    OPTIONAL { ?item wdt:P2035 ?LinkedIN }
-    ?node ps:P3602 wd:Q16061881 .
-    OPTIONAL { ?node pq:P1545 ?positie_op_lijst }
-    OPTIONAL { ?node pq:P1268 ?politieke_partij }
-    OPTIONAL { ?node pq:P2035 ?LinkedIN }
-	SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],nl" }
+#added before 2016-10
+SELECT ?parent ?parentLabel ?count
+WHERE
+{
+  {
+    SELECT ?parent (COUNT(?child) AS ?count)
+    WHERE
+    {
+      ?parent wdt:P40 ?child.
+    }
+    GROUP BY ?parent
+    ORDER BY DESC(?count)
+    LIMIT 10
+  }
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
 }
+ORDER BY DESC(?count)
+LIMIT 10

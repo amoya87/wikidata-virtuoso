@@ -8,27 +8,33 @@ PREFIX ps: <http://www.wikidata.org/prop/statement/>
 PREFIX pq: <http://www.wikidata.org/prop/qualifier/>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX bd: <http://www.bigdata.com/rdf#>
+
+PREFIX wdref: <http://www.wikidata.org/reference/>
+PREFIX psv: <http://www.wikidata.org/prop/statement/value/>
+PREFIX psn: <http://www.wikidata.org/prop/statement/value-normalized/>
+PREFIX pqv: <http://www.wikidata.org/prop/qualifier/value/>
+PREFIX pqn: <http://www.wikidata.org/prop/qualifier/value-normalized/>
+PREFIX pr: <http://www.wikidata.org/prop/reference/>
+PREFIX prv: <http://www.wikidata.org/prop/reference/value/>
+PREFIX prn: <http://www.wikidata.org/prop/reference/value-normalized/>
+PREFIX wdno: <http://www.wikidata.org/prop/novalue/>
+PREFIX wdata: <http://www.wikidata.org/wiki/Special:EntityData/>
+
+PREFIX schema: <http://schema.org/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX prov: <http://www.w3.org/ns/prov#>
+PREFIX bds: <http://www.bigdata.com/rdf/search#>
+PREFIX gas: <http://www.bigdata.com/rdf/gas#>
+PREFIX hint: <http://www.bigdata.com/queryHints#>
 # -------------------------------------
-#added before 2016-10
- #sample from cywiki:Wicipedia:Merched_a_anwyd_yng_Nghymru
-SELECT ?item
-WHERE
-{
-	# gender = female
-  	?item wdt:P21 wd:Q6581072 .
-
-  	# place of birth = Wales (Q25)
-  	{ ?item wdt:P19 wd:Q25 }
-	# OR place of birth within Wales. This relies on places using P131 with Q25 ("Wales") as value (or with a value that has Q25 in P131)
-	UNION  { ?item wdt:P19 ?pob . ?pob wdt:P131* wd:Q25 }
-
-	# look for articles (sitelinks) in Welsh ("cy")
-  	OPTIONAL { ?sitelink schema:about ?item . ?sitelink schema:inLanguage "cy" }
-	# but select items with no such article
-	FILTER (!BOUND(?sitelink))
-
-	# humans only
-  	?item wdt:P31 wd:Q5 .
+#defaultView:Map
+select ?item ?coords_ where {
+  ?item wdt:P17 wd:Q712 .
+  ?item p:P625/psv:P625 ?coords .
+  ?coords wikibase:geoLatitude ?lat ;
+          wikibase:geoLongitude ?lon .
+  bind(strdt(concat("Point(", if((?lon < 0), str(?lon + 360), str(?lon)), " ", str(?lat), ")"), geo:wktLiteral) as ?coords_) .
 }
-#Listeria can only handle up to 5000
-LIMIT 1000

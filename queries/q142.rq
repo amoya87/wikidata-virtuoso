@@ -8,30 +8,30 @@ PREFIX ps: <http://www.wikidata.org/prop/statement/>
 PREFIX pq: <http://www.wikidata.org/prop/qualifier/>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX bd: <http://www.bigdata.com/rdf#>
-# -------------------------------------
-#added before 2016-10
 
-# German states, ordered by the number of company headquarters per million inhabitants
-# Replace wd:Q1221156 (state of Germany) by anything else you care about, e.g., wd:Q6256 (country)
-# Nested queries for correctness (don't count companies twice) and performance (aggregate before adding more data)
-# Limits: states without population missing; company data in Wikidata is always incomplete
-# Note: This query shows some not-so-easy nesting of DISTINCT (don't count any company twice) and aggregate, in combination with arithmetic output evaluation functions. It is a hard query that may time out if modified.
-SELECT
-	?state ?stateLabel
-	?companies
-	?population
-	(?companies/?population*1000000 AS ?companiesPerM)
-WHERE
-{
-	{ SELECT ?state (count(*) as ?companies) WHERE {
-		{SELECT DISTINCT ?company ?state WHERE {
-			?state wdt:P31 wd:Q1221156 .
-			?company wdt:P31/wdt:P279* wd:Q4830453 .
-			?company wdt:P159/wdt:P131* ?state .
-			FILTER NOT EXISTS{ ?company wdt:P576 ?date } # don't count dissolved companies
-		} }
-	} GROUP BY ?state  }
-    ?state wdt:P1082 ?population
-	SERVICE wikibase:label { bd:serviceParam wikibase:language "de" }
+PREFIX wdref: <http://www.wikidata.org/reference/>
+PREFIX psv: <http://www.wikidata.org/prop/statement/value/>
+PREFIX psn: <http://www.wikidata.org/prop/statement/value-normalized/>
+PREFIX pqv: <http://www.wikidata.org/prop/qualifier/value/>
+PREFIX pqn: <http://www.wikidata.org/prop/qualifier/value-normalized/>
+PREFIX pr: <http://www.wikidata.org/prop/reference/>
+PREFIX prv: <http://www.wikidata.org/prop/reference/value/>
+PREFIX prn: <http://www.wikidata.org/prop/reference/value-normalized/>
+PREFIX wdno: <http://www.wikidata.org/prop/novalue/>
+PREFIX wdata: <http://www.wikidata.org/wiki/Special:EntityData/>
+
+PREFIX schema: <http://schema.org/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX prov: <http://www.w3.org/ns/prov#>
+PREFIX bds: <http://www.bigdata.com/rdf/search#>
+PREFIX gas: <http://www.bigdata.com/rdf/gas#>
+PREFIX hint: <http://www.bigdata.com/queryHints#>
+# -------------------------------------
+SELECT ?item ?itemLabel ?inseeCode {
+  ?item wdt:P374 ?inseeCode .
+  FILTER (?inseeCode in ("75056", "69123", "13055"))
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en" }
 }
-ORDER BY DESC(?companiesPerM)

@@ -8,15 +8,39 @@ PREFIX ps: <http://www.wikidata.org/prop/statement/>
 PREFIX pq: <http://www.wikidata.org/prop/qualifier/>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX bd: <http://www.bigdata.com/rdf#>
+
+PREFIX wdref: <http://www.wikidata.org/reference/>
+PREFIX psv: <http://www.wikidata.org/prop/statement/value/>
+PREFIX psn: <http://www.wikidata.org/prop/statement/value-normalized/>
+PREFIX pqv: <http://www.wikidata.org/prop/qualifier/value/>
+PREFIX pqn: <http://www.wikidata.org/prop/qualifier/value-normalized/>
+PREFIX pr: <http://www.wikidata.org/prop/reference/>
+PREFIX prv: <http://www.wikidata.org/prop/reference/value/>
+PREFIX prn: <http://www.wikidata.org/prop/reference/value-normalized/>
+PREFIX wdno: <http://www.wikidata.org/prop/novalue/>
+PREFIX wdata: <http://www.wikidata.org/wiki/Special:EntityData/>
+
+PREFIX schema: <http://schema.org/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX prov: <http://www.w3.org/ns/prov#>
+PREFIX bds: <http://www.bigdata.com/rdf/search#>
+PREFIX gas: <http://www.bigdata.com/rdf/gas#>
+PREFIX hint: <http://www.bigdata.com/queryHints#>
 # -------------------------------------
 #added before 2016-10
 
 #defaultView:Map
-SELECT ?city ?cityLabel ?coordinates
+SELECT ?connectsairport ?connectsairportLabel ?place_served ?place_servedLabel ?coor
 WHERE
 {
-   VALUES ?highway { wd:Q559037 wd:Q58767 }
-   ?highway wdt:P2789 ?city .
-    ?city wdt:P625 ?coordinates .
-   SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
+  VALUES ?airport { wd:Q17480 } # Antwerp international airport  wd:Q17480
+  ?airport wdt:P81 ?connectsairport ;
+           wdt:P625 ?base_airport_coor .
+  ?connectsairport wdt:P931 ?place_served ;
+                   wdt:P625 ?coor .
+ 
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
 }

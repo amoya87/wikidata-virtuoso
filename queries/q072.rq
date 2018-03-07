@@ -8,25 +8,47 @@ PREFIX ps: <http://www.wikidata.org/prop/statement/>
 PREFIX pq: <http://www.wikidata.org/prop/qualifier/>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX bd: <http://www.bigdata.com/rdf#>
+
+PREFIX wdref: <http://www.wikidata.org/reference/>
+PREFIX psv: <http://www.wikidata.org/prop/statement/value/>
+PREFIX psn: <http://www.wikidata.org/prop/statement/value-normalized/>
+PREFIX pqv: <http://www.wikidata.org/prop/qualifier/value/>
+PREFIX pqn: <http://www.wikidata.org/prop/qualifier/value-normalized/>
+PREFIX pr: <http://www.wikidata.org/prop/reference/>
+PREFIX prv: <http://www.wikidata.org/prop/reference/value/>
+PREFIX prn: <http://www.wikidata.org/prop/reference/value-normalized/>
+PREFIX wdno: <http://www.wikidata.org/prop/novalue/>
+PREFIX wdata: <http://www.wikidata.org/wiki/Special:EntityData/>
+
+PREFIX schema: <http://schema.org/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX prov: <http://www.w3.org/ns/prov#>
+PREFIX bds: <http://www.bigdata.com/rdf/search#>
+PREFIX gas: <http://www.bigdata.com/rdf/gas#>
+PREFIX hint: <http://www.bigdata.com/queryHints#>
 # -------------------------------------
 #added before 2016-10
-SELECT ?item ?dob
+ #Definition for Occitania (Q104285) is the one defined by P527 on item Q104285
+SELECT ?item ?yob ?yod
 WHERE
 {
-  	# place of birth = Scotland (Q22)
-  	{ ?item wdt:P19 wd:Q22 }
-	# OR place of birth within Scotland.
-	UNION  { ?item wdt:P19 ?pob . ?pob wdt:P131* wd:Q22 }
+	# items with property place of birth
+	?item wdt:P19 ?pob .
+	#place of birth must be using P131 with one of the "?parts" (or -- note the "*" -- a value that uses one of the parts in P131, etc.)
+	?pob wdt:P131* ?parts .
+
+	# ?parts are those listed on item Q104285 with property P527
+	wd:Q104285 wdt:P527 ?parts . 
 
 	# humans only
   	?item wdt:P31 wd:Q5 .
 
-	# get DOB for ordering.
-	OPTIONAL { ?item wdt:P569 ?dob  }
+	#for display in the list, extract yob/yod. Could also be done by using P569 and P570 in "columns=" of Listeria's template
+	OPTIONAL { ?item wdt:P569 ?dob . BIND(YEAR(?dob) as ?yob) }
+	OPTIONAL { ?item wdt:P570 ?dod . BIND(YEAR(?dod) as ?yod) }
 }
-#Order by date of birth, avoid overriding this in the template with sort=
-ORDER BY ?dob
-#Listeria can only handle up to 5000
-LIMIT 4000
-#start at the first item
-OFFSET 0 #change to OFFSET 4000 to start at the 4001th item
+#LIMIT to 2000 as Listeria can only handle up to 5000
+LIMIT 2000

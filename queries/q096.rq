@@ -8,11 +8,46 @@ PREFIX ps: <http://www.wikidata.org/prop/statement/>
 PREFIX pq: <http://www.wikidata.org/prop/qualifier/>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX bd: <http://www.bigdata.com/rdf#>
+
+PREFIX wdref: <http://www.wikidata.org/reference/>
+PREFIX psv: <http://www.wikidata.org/prop/statement/value/>
+PREFIX psn: <http://www.wikidata.org/prop/statement/value-normalized/>
+PREFIX pqv: <http://www.wikidata.org/prop/qualifier/value/>
+PREFIX pqn: <http://www.wikidata.org/prop/qualifier/value-normalized/>
+PREFIX pr: <http://www.wikidata.org/prop/reference/>
+PREFIX prv: <http://www.wikidata.org/prop/reference/value/>
+PREFIX prn: <http://www.wikidata.org/prop/reference/value-normalized/>
+PREFIX wdno: <http://www.wikidata.org/prop/novalue/>
+PREFIX wdata: <http://www.wikidata.org/wiki/Special:EntityData/>
+
+PREFIX schema: <http://schema.org/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX prov: <http://www.w3.org/ns/prov#>
+PREFIX bds: <http://www.bigdata.com/rdf/search#>
+PREFIX gas: <http://www.bigdata.com/rdf/gas#>
+PREFIX hint: <http://www.bigdata.com/queryHints#>
 # -------------------------------------
-#added 2017-07-16
-SELECT ?doctor ?doctorLabel ?ordinal ?performer ?performerLabel WHERE {
-  ?doctor wdt:P31 wd:Q34358 .
-  OPTIONAL { ?doctor wdt:P1545 ?ordinal }
-  OPTIONAL { ?doctor wdt:P175 ?performer }
-  SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en" }
-} ORDER BY ASC(xsd:integer(?ordinal) )
+#added 2017-03-25 (46 results)
+SELECT ?sitelink
+WHERE
+{
+	# gender = female
+  	?item wdt:P21 wd:Q6581072 .
+
+  	# country = Pakistan (Q25)
+  	{ ?item wdt:P27 wd:Q843 }
+
+        # occupation = actress (Q33999)
+  	{ ?item wdt:P106 wd:Q33999 }
+ 
+	# look for articles (sitelinks) in Punjabi ("pa")
+  	{ ?sitelink schema:about ?item . ?sitelink schema:inLanguage "pa" }
+
+	# humans only
+  	?item wdt:P31 wd:Q5 .
+}
+#Listeria can only handle up to 5000
+LIMIT 5000

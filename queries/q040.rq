@@ -8,45 +8,43 @@ PREFIX ps: <http://www.wikidata.org/prop/statement/>
 PREFIX pq: <http://www.wikidata.org/prop/qualifier/>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX bd: <http://www.bigdata.com/rdf#>
+
+PREFIX wdref: <http://www.wikidata.org/reference/>
+PREFIX psv: <http://www.wikidata.org/prop/statement/value/>
+PREFIX psn: <http://www.wikidata.org/prop/statement/value-normalized/>
+PREFIX pqv: <http://www.wikidata.org/prop/qualifier/value/>
+PREFIX pqn: <http://www.wikidata.org/prop/qualifier/value-normalized/>
+PREFIX pr: <http://www.wikidata.org/prop/reference/>
+PREFIX prv: <http://www.wikidata.org/prop/reference/value/>
+PREFIX prn: <http://www.wikidata.org/prop/reference/value-normalized/>
+PREFIX wdno: <http://www.wikidata.org/prop/novalue/>
+PREFIX wdata: <http://www.wikidata.org/wiki/Special:EntityData/>
+
+PREFIX schema: <http://schema.org/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX prov: <http://www.w3.org/ns/prov#>
+PREFIX bds: <http://www.bigdata.com/rdf/search#>
+PREFIX gas: <http://www.bigdata.com/rdf/gas#>
+PREFIX hint: <http://www.bigdata.com/queryHints#>
 # -------------------------------------
 #defaultView:BarChart
-# male/female population _must_ not be added unqualified as total population (!)
-# this is an error and should be fixed at the item using P1540 and P1539 instead
-# (wrong query result may be a manifestation of such)
-SELECT ?year (AVG(?pop) AS ?population) ?countryLabel
-       (COUNT(*) AS ?number_of_chosen_sources) (SAMPLE(?method) AS ?a_source_of_those_chosen)
-WHERE
-{
-  ?country wdt:P31 wd:Q6256;
-           p:P1082 ?popStatement .
-  ?popStatement ps:P1082 ?pop;
-                pq:P585 ?date .
-  BIND(STR(YEAR(?date)) AS ?year)
-  
-  # IF multiple ?pop values per country per year exist, we prioritize by source
-  #       census 1st, others 2nd, estimation(s) 3rd, unknown sources (none supplies P459) last
-  # note: wikibase:rank won't help here: each year may have multiple statements for ?pop value
-  #       rank:prefered is used for the best value (or values) of the latest or current year
-  #       rank:normal may be justified for all of multiple ?pop values for a given year
-  OPTIONAL { ?popStatement pq:P459 ?method. }
-  OPTIONAL { ?country p:P1082 [ pq:P585 ?d; pq:P459 ?estimate ].
-             FILTER(STR(YEAR(?d)) = ?year). FILTER(?estimate = wd:Q791801). }
-  OPTIONAL { ?country p:P1082 [ pq:P585 ?e; pq:P459 ?census ].
-             FILTER(STR(YEAR(?e)) = ?year). FILTER(?census = wd:Q39825). }
-  OPTIONAL { ?country p:P1082 [ pq:P585 ?f; pq:P459 ?other ].
-             FILTER(STR(YEAR(?f)) = ?year). FILTER(?other != wd:Q39825 && ?other != wd:Q791801). }
-  BIND(COALESCE( 
-    IF(BOUND(?census), ?census, 1/0),
-    IF(BOUND(?other), ?other, 1/0),
-    IF(BOUND(?estimate), ?estimate, 1/0) ) AS ?pref_method).
-  FILTER(IF(BOUND(?pref_method),?method = ?pref_method,true))
-  # .. still need to group if multiple values per country per year exist and
-  # - none is qualified with P459
-  # - multiple ?estimate or multiple ?census (>1 value from same source)
-  # - ?other yields more than one source (>1 values are better than optionally
-  #                         supplied estimate, but no census source available)
-
-  SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en" }               
+SELECT (SAMPLE(?_continentLabel) AS ?continent) (COUNT(?_country) AS ?battles) (SAMPLE(?_countryLabel) AS ?_countryLabel) (SAMPLE(?year) AS ?year)  WHERE {
+  ?subj wdt:P31 wd:Q178561.        # instance of battle
+  OPTIONAL { ?subj wdt:P580 ?d1. } # start date
+  OPTIONAL { ?subj wdt:P585 ?d2. } # point in time
+  OPTIONAL { ?subj wdt:P582 ?d3. } # end date
+  BIND(IF(!BOUND(?d1), IF(!BOUND(?d2), ?d3, ?d2), ?d1) AS ?date)
+  BIND(str(YEAR(?date)) AS ?year)
+  FILTER(BOUND(?year))
+  ?subj wdt:P276/wdt:P17 ?_country.
+  ?_country wdt:P30 ?_continent.
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en".
+       ?_country rdfs:label ?_countryLabel.
+       ?_continent rdfs:label ?_continentLabel.}
+  BIND((NOW()) - ?date AS ?distance)
+  FILTER((0 <= ?distance) && (?distance < 31 * 12 * 80))
 }
-GROUP BY ?year ?countryLabel
-ORDER BY ?year ?countryLabel
+GROUP BY ?year ?_country

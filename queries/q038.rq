@@ -8,22 +8,37 @@ PREFIX ps: <http://www.wikidata.org/prop/statement/>
 PREFIX pq: <http://www.wikidata.org/prop/qualifier/>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX bd: <http://www.bigdata.com/rdf#>
-# -------------------------------------
-#defaultView:BarChart
 
-SELECT(SAMPLE(?year) AS ?year) (COUNT(?_country) AS ?battles) (SAMPLE(?_countryLabel) AS ?_countryLabel)  WHERE {
-  ?subj wdt:P31 wd:Q178561.  # instance of battle
-  OPTIONAL { ?subj wdt:P580 ?d1. }  # start time
-  OPTIONAL { ?subj wdt:P585 ?d2. }  # point in time
-  OPTIONAL { ?subj wdt:P582 ?d3. }  # end time
-  BIND(IF(!BOUND(?d1), IF(!BOUND(?d2), ?d3, ?d2), ?d1) AS ?date)
-  BIND(STR(YEAR(?date)) AS ?year)
-  FILTER(BOUND(?year))
-  ?subj wdt:P276/wdt:P17 ?_country.  # country of location of battle
-  BIND((NOW()) - ?date AS ?distance)
-  FILTER((0 <= ?distance) && (?distance < 31 * 12 * 80))
+PREFIX wdref: <http://www.wikidata.org/reference/>
+PREFIX psv: <http://www.wikidata.org/prop/statement/value/>
+PREFIX psn: <http://www.wikidata.org/prop/statement/value-normalized/>
+PREFIX pqv: <http://www.wikidata.org/prop/qualifier/value/>
+PREFIX pqn: <http://www.wikidata.org/prop/qualifier/value-normalized/>
+PREFIX pr: <http://www.wikidata.org/prop/reference/>
+PREFIX prv: <http://www.wikidata.org/prop/reference/value/>
+PREFIX prn: <http://www.wikidata.org/prop/reference/value-normalized/>
+PREFIX wdno: <http://www.wikidata.org/prop/novalue/>
+PREFIX wdata: <http://www.wikidata.org/wiki/Special:EntityData/>
+
+PREFIX schema: <http://schema.org/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX prov: <http://www.w3.org/ns/prov#>
+PREFIX bds: <http://www.bigdata.com/rdf/search#>
+PREFIX gas: <http://www.bigdata.com/rdf/gas#>
+PREFIX hint: <http://www.bigdata.com/queryHints#>
+# -------------------------------------
+#defaultView:LineChart
+SELECT ?year (COUNT(?_genre) AS ?count) (SAMPLE(?_genreLabel) AS ?_genreLabel) WHERE {
+  ?item wdt:P31 wd:Q215380; # instance of: band
+        wdt:P571 ?_date;   # inception
+        wdt:P136 ?_genre.
+  BIND(str(YEAR(?_date)) AS ?year)
   SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en".
-                          ?_country rdfs:label ?_countryLabel.}
+                          ?_genre rdfs:label ?_genreLabel.}
+  FILTER(?_date >= "1960-00-00T00:00:00Z"^^xsd:dateTime)
 }
-GROUP BY ?year ?_country
-ORDER BY ?_countryLabel
+GROUP BY ?_genreLabel ?year
+HAVING (?count > 10)
