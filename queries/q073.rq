@@ -1,0 +1,20 @@
+PREFIX wd: <http://www.wikidata.org/entity/>
+PREFIX wds: <http://www.wikidata.org/entity/statement/>
+PREFIX wdv: <http://www.wikidata.org/value/>
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+PREFIX wikibase: <http://wikiba.se/ontology#>
+PREFIX p: <http://www.wikidata.org/prop/>
+PREFIX ps: <http://www.wikidata.org/prop/statement/>
+PREFIX pq: <http://www.wikidata.org/prop/qualifier/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX bd: <http://www.bigdata.com/rdf#>
+# -------------------------------------
+#Properties grouped by their parent property
+#TODO: should display links and numeric ids
+#defaultView:Tree
+SELECT ?property2 ?property2Label ?property1 ?property1Label WHERE {
+  ?property1 rdf:type wikibase:Property. #not replaceable with wikibase:Item, wikibase:Statement, wikibase:Reference at WDQS
+                                         #https://www.mediawiki.org/wiki/Wikibase/Indexing/RDF_Dump_Format#WDQS_data_differences
+  ?property1 wdt:P1647 ?property2.
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }
+}

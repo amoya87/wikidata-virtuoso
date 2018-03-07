@@ -1,0 +1,24 @@
+PREFIX wd: <http://www.wikidata.org/entity/>
+PREFIX wds: <http://www.wikidata.org/entity/statement/>
+PREFIX wdv: <http://www.wikidata.org/value/>
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+PREFIX wikibase: <http://wikiba.se/ontology#>
+PREFIX p: <http://www.wikidata.org/prop/>
+PREFIX ps: <http://www.wikidata.org/prop/statement/>
+PREFIX pq: <http://www.wikidata.org/prop/qualifier/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX bd: <http://www.bigdata.com/rdf#>
+# -------------------------------------
+SELECT ?director ?director_label ?films ?sitelinks ((?films * ?sitelinks) as ?rank)
+WHERE {
+  {SELECT ?director (count(distinct ?film) as ?films) (count(distinct ?sitelink) as ?sitelinks)
+     WHERE { 
+       ?director wdt:P106 wd:Q2526255 .  				# has "film director" as occupation
+	   ?film wdt:P57 ?director . 	 					# get all films directed by the director
+       ?sitelink schema:about ?director .				# get all the sitelinks about the director
+       } GROUP BY ?director }
+SERVICE wikibase:label { 
+  bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en".  # Get label if it exists
+?director rdfs:label ?director_label } 	
+} ORDER BY DESC(?rank)
+LIMIT 100

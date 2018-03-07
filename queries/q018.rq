@@ -1,0 +1,27 @@
+PREFIX wd: <http://www.wikidata.org/entity/>
+PREFIX wds: <http://www.wikidata.org/entity/statement/>
+PREFIX wdv: <http://www.wikidata.org/value/>
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+PREFIX wikibase: <http://wikiba.se/ontology#>
+PREFIX p: <http://www.wikidata.org/prop/>
+PREFIX ps: <http://www.wikidata.org/prop/statement/>
+PREFIX pq: <http://www.wikidata.org/prop/qualifier/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX bd: <http://www.bigdata.com/rdf#>
+# -------------------------------------
+SELECT ?s ?desc ?linkcount
+WHERE
+{
+  ?s wdt:P31 wd:Q5 ;   # human
+     wdt:P21 wd:Q6581072 ;  # gender: female
+     wdt:P569 ?born .
+  FILTER (?born >= "1921-01-01T00:00:00Z"^^xsd:dateTime) .
+  ?s wikibase:sitelinks ?linkcount .
+  MINUS {
+    ?s wdt:P18 []  # exclude if there is an image
+  }
+?s rdfs:label ?desc FILTER(lang(?desc)="en").
+}
+GROUP BY ?s ?desc ?linkcount
+ORDER BY DESC(?linkcount)
+LIMIT 50

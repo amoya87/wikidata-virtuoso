@@ -1,0 +1,24 @@
+PREFIX wd: <http://www.wikidata.org/entity/>
+PREFIX wds: <http://www.wikidata.org/entity/statement/>
+PREFIX wdv: <http://www.wikidata.org/value/>
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+PREFIX wikibase: <http://wikiba.se/ontology#>
+PREFIX p: <http://www.wikidata.org/prop/>
+PREFIX ps: <http://www.wikidata.org/prop/statement/>
+PREFIX pq: <http://www.wikidata.org/prop/qualifier/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX bd: <http://www.bigdata.com/rdf#>
+# -------------------------------------
+#added before 2016-10
+
+# Bodies of water that most watercourses end in (transitive).
+# For example, over 4000 watercourses eventually flow into the Ob,
+# and since the Ob flows into the Kara Sea, the Kara Sea has over 4000 results as well.
+SELECT ?mouth (COUNT(?watercourse) AS ?count)
+WHERE
+{
+  ?watercourse wdt:P403+ ?mouth.
+}
+GROUP BY ?mouth
+ORDER BY DESC(?count)
+LIMIT 10

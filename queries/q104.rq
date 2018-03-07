@@ -1,0 +1,34 @@
+PREFIX wd: <http://www.wikidata.org/entity/>
+PREFIX wds: <http://www.wikidata.org/entity/statement/>
+PREFIX wdv: <http://www.wikidata.org/value/>
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+PREFIX wikibase: <http://wikiba.se/ontology#>
+PREFIX p: <http://www.wikidata.org/prop/>
+PREFIX ps: <http://www.wikidata.org/prop/statement/>
+PREFIX pq: <http://www.wikidata.org/prop/qualifier/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX bd: <http://www.bigdata.com/rdf#>
+# -------------------------------------
+#added before 2016-10
+
+#Interesting maintenance query that shows the relative prominence of a country's current (living) population on Wikidata. The query tends to time out when using all countries at once, but it might be possible to get the figures for each individual country by using uncommenting the line as indicated below
+SELECT
+	?country ?countryLabel
+	?wikiPersons
+	?population
+	(ROUND(?wikiPersons/?population*1000000) AS ?wikiPersonsPerM)
+WHERE
+{
+	{ SELECT ?country (count(*) as ?wikiPersons) WHERE {
+		{SELECT DISTINCT ?person ?country WHERE {
+			?country wdt:P31 wd:Q185441 .
+			# BIND( wd:Q30 AS ?country ) # use instead of previous line to check individual countries
+			?person wdt:P31 wd:Q5 .
+			?person wdt:P27 ?country .
+			FILTER NOT EXISTS{ ?person wdt:P570 ?date } # only count living people
+		} }
+	} GROUP BY ?country  }
+	?country wdt:P1082 ?population
+	SERVICE wikibase:label { bd:serviceParam wikibase:language "en" }
+}
+ORDER BY DESC(?wikiPersonsPerM)

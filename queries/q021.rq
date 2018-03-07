@@ -1,0 +1,38 @@
+PREFIX wd: <http://www.wikidata.org/entity/>
+PREFIX wds: <http://www.wikidata.org/entity/statement/>
+PREFIX wdv: <http://www.wikidata.org/value/>
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+PREFIX wikibase: <http://wikiba.se/ontology#>
+PREFIX p: <http://www.wikidata.org/prop/>
+PREFIX ps: <http://www.wikidata.org/prop/statement/>
+PREFIX pq: <http://www.wikidata.org/prop/qualifier/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX bd: <http://www.bigdata.com/rdf#>
+# -------------------------------------
+#added before 2016-10
+
+PREFIX entity: <http://www.wikidata.org/entity/>
+#partial results
+
+SELECT ?propUrl ?propLabel ?valUrl ?valLabel ?picture
+WHERE
+{
+	hint:Query hint:optimizer 'None' .
+	{	BIND(entity:Q42 AS ?valUrl) .
+		BIND("N/A" AS ?propUrl ) .
+		BIND("identity"@en AS ?propLabel ) .
+	}
+	UNION
+	{	entity:Q42 ?propUrl ?valUrl .
+		?property ?ref ?propUrl .
+		?property rdf:type wikibase:Property .
+		?property rdfs:label ?propLabel
+	}
+	
+  	?valUrl rdfs:label ?valLabel
+	FILTER (LANG(?valLabel) = 'en') .
+	OPTIONAL{ ?valUrl wdt:P18 ?picture .}
+	FILTER (lang(?propLabel) = 'en' )
+}
+ORDER BY ?propUrl ?valUrl
+LIMIT 200

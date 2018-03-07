@@ -1,0 +1,22 @@
+PREFIX wd: <http://www.wikidata.org/entity/>
+PREFIX wds: <http://www.wikidata.org/entity/statement/>
+PREFIX wdv: <http://www.wikidata.org/value/>
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+PREFIX wikibase: <http://wikiba.se/ontology#>
+PREFIX p: <http://www.wikidata.org/prop/>
+PREFIX ps: <http://www.wikidata.org/prop/statement/>
+PREFIX pq: <http://www.wikidata.org/prop/qualifier/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX bd: <http://www.bigdata.com/rdf#>
+# -------------------------------------
+#Wikisource pages for authors of scientific articles, ordered by Wikisource language
+#added in 2017-09
+SELECT DISTINCT ?item ?wikisourceSitelink ?wikisourceLanguage WHERE {
+  ?wikisourceSitelink schema:isPartOf [ wikibase:wikiGroup "wikisource" ];
+                      schema:inLanguage ?wikisourceLanguage;
+                      schema:about ?item.
+  ?paper wdt:P31 wd:Q13442814;
+         wdt:P50 ?item.
+}
+ORDER BY ?wikisourceLanguage
+LIMIT 300

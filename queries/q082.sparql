@@ -1,8 +1,0 @@
-# -------------------------------------
-SELECT DISTINCT ?band ?bandLabel
-WHERE
-{
-	?band  wdt:P31 wd:Q5741069 .
-        ?band rdfs:label ?bandLabel .
-	FILTER(STRSTARTS(?bandLabel, 'M')) .
-}

@@ -1,0 +1,23 @@
+PREFIX wd: <http://www.wikidata.org/entity/>
+PREFIX wds: <http://www.wikidata.org/entity/statement/>
+PREFIX wdv: <http://www.wikidata.org/value/>
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+PREFIX wikibase: <http://wikiba.se/ontology#>
+PREFIX p: <http://www.wikidata.org/prop/>
+PREFIX ps: <http://www.wikidata.org/prop/statement/>
+PREFIX pq: <http://www.wikidata.org/prop/qualifier/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX bd: <http://www.bigdata.com/rdf#>
+# -------------------------------------
+#added before 2016-10
+
+#defaultView:Map
+SELECT DISTINCT ?connection ?connectionLabel ?connectedWith ?connectedWithLabel ?coor
+WHERE
+{
+  VALUES ?city {wd:Q3001} # wd:Q3001 = Paramaribo}
+  ?connection wdt:P2789+ ?city ;
+              wdt:P2789+ ?connectedWith .
+  ?connectedWith wdt:P625 ?coor .
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
+  }

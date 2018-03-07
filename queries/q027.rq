@@ -1,0 +1,22 @@
+PREFIX wd: <http://www.wikidata.org/entity/>
+PREFIX wds: <http://www.wikidata.org/entity/statement/>
+PREFIX wdv: <http://www.wikidata.org/value/>
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+PREFIX wikibase: <http://wikiba.se/ontology#>
+PREFIX p: <http://www.wikidata.org/prop/>
+PREFIX ps: <http://www.wikidata.org/prop/statement/>
+PREFIX pq: <http://www.wikidata.org/prop/qualifier/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX bd: <http://www.bigdata.com/rdf#>
+# -------------------------------------
+#defaultView:Dimensions
+SELECT ?elementLabel ?boiling_point ?melting_point ?electronegativity ?density ?mass WHERE {
+?element wdt:P31 wd:Q11344;
+   wdt:P2102 ?boiling_point;
+   wdt:P2101 ?melting_point;
+   wdt:P1108 ?electronegativity;
+   wdt:P2054 ?density;
+   wdt:P2067 ?mass.
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en" }
+}
+LIMIT 100

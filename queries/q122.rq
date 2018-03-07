@@ -1,0 +1,29 @@
+PREFIX wd: <http://www.wikidata.org/entity/>
+PREFIX wds: <http://www.wikidata.org/entity/statement/>
+PREFIX wdv: <http://www.wikidata.org/value/>
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+PREFIX wikibase: <http://wikiba.se/ontology#>
+PREFIX p: <http://www.wikidata.org/prop/>
+PREFIX ps: <http://www.wikidata.org/prop/statement/>
+PREFIX pq: <http://www.wikidata.org/prop/qualifier/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX bd: <http://www.bigdata.com/rdf#>
+# -------------------------------------
+#defaultView:ScatterChart
+SELECT ?from (?distNum AS ?kilometers) ?to (?to AS ?animation) WHERE {
+  BIND(wd:Q15284 AS ?muntype).
+  BIND(wd:Q6308 AS ?area).
+  ?mun wdt:P31/wdt:P279* ?muntype;
+       wdt:P131 ?area;
+       wdt:P625 ?loc.
+  OPTIONAL { ?mun2 wdt:P31/wdt:P279* ?muntype;
+                   wdt:P131 ?area;
+                   wdt:P625 ?loc2. }
+  BIND(geof:distance(?loc, ?loc2) AS ?distNum).
+
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en".
+    ?mun rdfs:label ?from.
+    ?mun2 rdfs:label ?to.
+  }
+}
+ORDER BY ?from ?kilometers

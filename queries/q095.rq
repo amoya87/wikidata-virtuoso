@@ -1,0 +1,32 @@
+PREFIX wd: <http://www.wikidata.org/entity/>
+PREFIX wds: <http://www.wikidata.org/entity/statement/>
+PREFIX wdv: <http://www.wikidata.org/value/>
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+PREFIX wikibase: <http://wikiba.se/ontology#>
+PREFIX p: <http://www.wikidata.org/prop/>
+PREFIX ps: <http://www.wikidata.org/prop/statement/>
+PREFIX pq: <http://www.wikidata.org/prop/qualifier/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX bd: <http://www.bigdata.com/rdf#>
+# -------------------------------------
+#added 2017-03-25 (46 results)
+SELECT ?sitelink
+WHERE
+{
+	# gender = female
+  	?item wdt:P21 wd:Q6581072 .
+
+  	# country = Pakistan (Q25)
+  	{ ?item wdt:P27 wd:Q843 }
+
+        # occupation = actress (Q33999)
+  	{ ?item wdt:P106 wd:Q33999 }
+ 
+	# look for articles (sitelinks) in Punjabi ("pa")
+  	{ ?sitelink schema:about ?item . ?sitelink schema:inLanguage "pa" }
+
+	# humans only
+  	?item wdt:P31 wd:Q5 .
+}
+#Listeria can only handle up to 5000
+LIMIT 5000
