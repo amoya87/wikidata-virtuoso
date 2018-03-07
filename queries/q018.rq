@@ -43,6 +43,5 @@ WHERE
   }
 ?s rdfs:label ?desc FILTER(lang(?desc)="en").
 }
-GROUP BY ?s ?desc ?linkcount
 ORDER BY DESC(?linkcount)
 LIMIT 50

@@ -31,16 +31,10 @@ PREFIX gas: <http://www.bigdata.com/rdf/gas#>
 PREFIX hint: <http://www.bigdata.com/queryHints#>
 # -------------------------------------
 #Whose birthday is today?
-SELECT ?entityLabel (YEAR(?date) as ?year)
+SELECT ?entity (YEAR(?date) as ?year)
 WHERE
 {
-    BIND(MONTH(NOW()) AS ?nowMonth)
-    BIND(DAY(NOW()) AS ?nowDay)
-
     ?entity wdt:P569 ?date .
-    FILTER (MONTH(?date) = ?nowMonth && DAY(?date) = ?nowDay)
-    SERVICE wikibase:label {
-        bd:serviceParam wikibase:language "en" .
-    }
+    FILTER (MONTH(?date) = MONTH(NOW()) && DAY(?date) = DAY(NOW()))
 }
 LIMIT 10

@@ -30,9 +30,8 @@ PREFIX bds: <http://www.bigdata.com/rdf/search#>
 PREFIX gas: <http://www.bigdata.com/rdf/gas#>
 PREFIX hint: <http://www.bigdata.com/queryHints#>
 # -------------------------------------
-SELECT ?item ?itemLabel 
+SELECT ?item 
 WHERE 
 {
   ?item wdt:P31 wd:Q146.
-  SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }
 }

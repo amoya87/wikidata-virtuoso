@@ -30,15 +30,14 @@ PREFIX bds: <http://www.bigdata.com/rdf/search#>
 PREFIX gas: <http://www.bigdata.com/rdf/gas#>
 PREFIX hint: <http://www.bigdata.com/queryHints#>
 # -------------------------------------
-SELECT ?author ?authorLabel (COUNT(?paper) AS ?count)
+SELECT ?author (COUNT(?paper) AS ?count)
 WHERE
 {
 	?article 	schema:about ?author ;
 			schema:isPartOf <https://species.wikimedia.org/> .
     ?author wdt:P31 wd:Q5.
     ?paper wdt:P50 ?author.
-	SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en" }
 }
-GROUP BY ?author ?authorLabel
+GROUP BY ?author
 ORDER BY DESC(?count)
 LIMIT 200

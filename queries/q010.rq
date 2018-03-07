@@ -38,6 +38,7 @@ SELECT ?eyeColorLabel (COUNT(?person) AS ?count)
 WHERE
 {
 	?person wdt:P1340 ?eyeColor.
-	SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }
+        ?eyeColor rdfs:label ?eyeColorLabel.
+        FILTER (lang(?eyeColorLabel) = 'en')
 }
 GROUP BY ?eyeColorLabel

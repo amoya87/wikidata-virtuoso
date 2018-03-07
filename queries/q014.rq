@@ -40,11 +40,8 @@ WHERE
 	?mayor wdt:P21 wd:Q6581072 .      # ... where the ?mayor has P21 (sex or gender) female
 	FILTER NOT EXISTS { ?statement pq:P582 ?x }  # ... but the statement has no P582 (end date) qualifier
 	?city wdt:P17 ?country .          # Also find the country of the city
- 	
-	# If available, get the "ru" label of the country, use "en" as fallback:
-	SERVICE wikibase:label {
-		bd:serviceParam wikibase:language "ru,en" .
-	}
+ 	?country rdfs:label ?countryLabel.
+	FILTER (lang(?countryLabel) = 'en')
 }
 GROUP BY ?country ?countryLabel
 ORDER BY DESC(?count)

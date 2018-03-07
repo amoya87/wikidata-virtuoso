@@ -30,11 +30,10 @@ PREFIX bds: <http://www.bigdata.com/rdf/search#>
 PREFIX gas: <http://www.bigdata.com/rdf/gas#>
 PREFIX hint: <http://www.bigdata.com/queryHints#>
 # -------------------------------------
-SELECT ?human ?humanLabel 
+SELECT ?human
 WHERE
 {
   ?human wdt:P31 wd:Q5 .         #find humans
   ?human p:P40 ?childStatement . #with at least one P40 (child) statement
   ?childStatement rdf:type wdno:P40 .   #where the P40 (child) statement is defined to be "no value"
-  SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en" . }
 }

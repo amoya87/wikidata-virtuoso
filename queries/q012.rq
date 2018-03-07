@@ -35,7 +35,6 @@ PREFIX schema: <http://schema.org/>
 SELECT ?sitelink
 WHERE 
 {
-  BIND(wd:Q52 AS ?wikipedia)
-  ?sitelink schema:about ?wikipedia .
+  ?sitelink schema:about wd:Q52 .
   FILTER REGEX(STR(?sitelink), ".wikipedia.org/wiki/") .
 }
