@@ -30,7 +30,7 @@ PREFIX bds: <http://www.bigdata.com/rdf/search#>
 PREFIX gas: <http://www.bigdata.com/rdf/gas#>
 PREFIX hint: <http://www.bigdata.com/queryHints#>
 #defaultView:BarChart
-SELECT (SAMPLE(?_continentLabel) AS ?continent) (COUNT(?_country) AS ?battles) (SAMPLE(?_countryLabel) AS ?_countryLabel) (SAMPLE(?year) AS ?year)  WHERE {
+SELECT (SAMPLE(?_continent) AS ?continent) (COUNT(?_country) AS ?battles) (SAMPLE(?_country) AS ?_countryLabel) (SAMPLE(?year) AS ?year)  WHERE {
   ?subj wdt:P31 wd:Q178561.        # instance of battle
   OPTIONAL { ?subj wdt:P580 ?d1. } # start date
   OPTIONAL { ?subj wdt:P585 ?d2. } # point in time
@@ -40,9 +40,6 @@ SELECT (SAMPLE(?_continentLabel) AS ?continent) (COUNT(?_country) AS ?battles) (
   FILTER(BOUND(?year))
   ?subj wdt:P276/wdt:P17 ?_country.
   ?_country wdt:P30 ?_continent.
-  SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en".
-       ?_country rdfs:label ?_countryLabel.
-       ?_continent rdfs:label ?_continentLabel.}
   BIND((NOW()) - ?date AS ?distance)
   FILTER((0 <= ?distance) && (?distance < 31 * 12 * 80))
 }

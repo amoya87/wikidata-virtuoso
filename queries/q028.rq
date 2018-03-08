@@ -30,13 +30,12 @@ PREFIX bds: <http://www.bigdata.com/rdf/search#>
 PREFIX gas: <http://www.bigdata.com/rdf/gas#>
 PREFIX hint: <http://www.bigdata.com/queryHints#>
 #defaultView:Dimensions
-SELECT ?elementLabel ?boiling_point ?melting_point ?electronegativity ?density ?mass WHERE {
+SELECT ?element ?boiling_point ?melting_point ?electronegativity ?density ?mass WHERE {
 ?element wdt:P31 wd:Q11344;
    wdt:P2102 ?boiling_point;
    wdt:P2101 ?melting_point;
    wdt:P1108 ?electronegativity;
    wdt:P2054 ?density;
    wdt:P2067 ?mass.
-  SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en" }
 }
 LIMIT 100

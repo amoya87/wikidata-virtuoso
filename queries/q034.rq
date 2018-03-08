@@ -30,8 +30,6 @@ PREFIX bds: <http://www.bigdata.com/rdf/search#>
 PREFIX gas: <http://www.bigdata.com/rdf/gas#>
 PREFIX hint: <http://www.bigdata.com/queryHints#>
 #defaultView:LineChart
-SELECT ?country ?year ?population ?countryLabel WHERE {
-  {
     SELECT ?country ?year (AVG(?population) AS ?population) WHERE {
       {
         SELECT ?country (str(YEAR(?date)) AS ?year) ?population WHERE {
@@ -43,6 +41,3 @@ SELECT ?country ?year ?population ?countryLabel WHERE {
       }
     }
     GROUP BY ?country ?year
-  }
-  SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }
-}

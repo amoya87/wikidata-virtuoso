@@ -43,8 +43,9 @@ delete double select when is only for label reason
 017:remove double select
 018:remove group by
 007:019:limit without sense
-
+029:external service:err
 
 
 What can i do with limit without sense?
+What is the efect of remove label from queries?
 

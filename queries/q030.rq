@@ -32,8 +32,8 @@ PREFIX hint: <http://www.bigdata.com/queryHints#>
 #Show firearms cartridges and which they are based on
 #defaultView:Graph
 SELECT 
-?item ?itemLabel ?image 
-?other ?otherLabel ?image2
+?item ?image 
+?other ?image2
 WHERE
 {
     ?item  wdt:P279+ wd:Q37144 .   # cartridges
@@ -42,5 +42,4 @@ WHERE
       ?item  wdt:P18     ?image  .   # grab image
       ?other wdt:P18     ?image2 .   # grab image
     }
-    SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en" }
 }

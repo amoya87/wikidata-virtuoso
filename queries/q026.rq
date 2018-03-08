@@ -30,12 +30,11 @@ PREFIX bds: <http://www.bigdata.com/rdf/search#>
 PREFIX gas: <http://www.bigdata.com/rdf/gas#>
 PREFIX hint: <http://www.bigdata.com/queryHints#>
 #defaultView:Timeline
-SELECT ?item ?itemLabel ?launchdate (SAMPLE(?image) AS ?image)
+SELECT ?item ?launchdate (SAMPLE(?image) AS ?image)
 WHERE
 {
 	?item wdt:P31 wd:Q26529 .
     ?item wdt:P619 ?launchdate .
-	SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en" }
     OPTIONAL { ?item wdt:P18 ?image }
 }
-GROUP BY ?item ?itemLabel ?launchdate
+GROUP BY ?item ?launchdate
