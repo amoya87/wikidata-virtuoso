@@ -16,3 +16,6 @@ sh virtuoso-run-script.sh commit.sql
 
 # Renable auto-indexing once finished with bulk operations
 sh virtuoso-run-script.sh auto_indexing_enable.sql
+
+# Turn off virtuoso service
+sh virtuoso-run-script.sh shutdown.sql
