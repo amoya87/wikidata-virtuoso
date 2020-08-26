@@ -4,7 +4,7 @@
 kill -9 `pidof virtuoso-t`
 
 system_memory_in_mb=`free -m | awk '/:/ {print $2;exit}'`
-echo La memoria libre es: $system_memory_in_mb
+echo La memoria total es: $system_memory_in_mb
 # each buffer caches a 8K page of data and occupies approx. 8700 bytes of memory
 # it's suggested to set this value to 65 % of ram for a db only server
 # so if you have 32 GB of ram: 32*1000^3*0.65/8700 = 2390804
