@@ -11,7 +11,7 @@ echo La memoria total es: $system_memory_in_mb
 # default is 2000 which will use 16 MB ram ;)
 numberOfBuffers=$(($system_memory_in_mb * 80))
 read -p "Enter the number of buffers [$numberOfBuffers]: " numberOfBuffers;
-if [[ ( $numberOfBuffers = "") ]] ;then
+if [ -z "$numberOfBuffers" ] ;then
 	numberOfBuffers=$(($system_memory_in_mb * 80));
 fi;
 echo NumberOfBuffers = $numberOfBuffers
@@ -33,7 +33,7 @@ echo DirsAllowed += $DIR
 
 
 # DirsAllowed  = ..., /path/to/data
-if [[ -d $DIR ]] ; then 
+if [ -d $DIR ] ; then 
 	sed -i "/^DirsAllowed.*/s|$|, ${DIR}|g" /usr/local/var/lib/virtuoso/db/virtuoso.ini
 fi;
 
